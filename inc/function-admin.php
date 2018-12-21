@@ -42,6 +42,7 @@ function sunset_add_admin_page() {
 function sunset_custom_settings() {
   register_setting("sunset-settings-group", "first_name");
   register_setting("sunset-settings-group", "last_name");
+  register_setting("sunset-settings-group", "user_description");
   register_setting("sunset-settings-group", "twitter_handler", "sunset_sanitize_twitter_handler");
   register_setting("sunset-settings-group", "facebook_handler");
   register_setting("sunset-settings-group", "gplus_handler");
@@ -57,6 +58,13 @@ function sunset_custom_settings() {
     "sidebar-name", 
     "Full Name", 
     "sunset_sidebar_name", 
+    "edward_sunset",
+    "sunset-sidebar-options"
+  );
+  add_settings_field(
+    "sidebar-description", 
+    "Description", 
+    "sunset_sidebar_description", 
     "edward_sunset",
     "sunset-sidebar-options"
   );
@@ -95,6 +103,13 @@ function sunset_sidebar_facebook() {
   $facebook = esc_attr( get_option('facebook_handler') );
   echo '
     <input type="text" name="facebook_handler" value="'.$facebook.'" placeholder="facebook" />
+  ';
+}
+
+function sunset_sidebar_description() {
+  $description = esc_attr( get_option('user_description') );
+  echo '
+    <input type="text" name="user_description" value="'.$description.'" placeholder="description" />
   ';
 }
 
