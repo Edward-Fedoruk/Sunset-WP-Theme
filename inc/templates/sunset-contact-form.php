@@ -9,7 +9,7 @@
 
 
 <form method="post" action="options.php" class="sunset-general-form">
-	<?php settings_fields( "sunset-theme-support" ); ?>
-	<?php do_settings_sections( "edward_sunset_theme" ); ?>
-	<?php submit_button("Save Changes", "primary", "btnSubmit"); ?>
+	<?php settings_fields( "sunset-contact-options" ); ?>
+	<?php do_settings_sections( "edward_sunset_theme_contact" ); ?>
+	<?php submit_button(); ?>
 </form>

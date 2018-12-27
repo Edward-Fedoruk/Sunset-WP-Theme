@@ -10,6 +10,7 @@ function sunset_add_admin_page() {
   // Generate admin sub pages
   add_submenu_page("edward_sunset", "Sunset Sidebar options", "Sidebar", "manage_options", "edward_sunset", "sunset_theme_create_page");
   add_submenu_page("edward_sunset", "Sunset theme options", "Theme options", "manage_options", "edward_sunset_theme", "sunset_theme_support_page");
+  add_submenu_page("edward_sunset", "Sunset Contact Form", "Contact Form", "manage_options", "edward_sunset_theme_contact", "sunset_contact_form_page");
   add_submenu_page("edward_sunset", "sunset CSS options", "Custom CSS", "manage_options", "edward_sunset_css", "sunset_theme_settings_page");
 
   // Activate custom settings
@@ -36,15 +37,42 @@ function sunset_custom_settings() {
   add_settings_field("sidebar-gplus", "Google+", "sunset_sidebar_gplus", "edward_sunset", "sunset-sidebar-options");
 
   // Theme support
-  register_setting("sunset-theme-support", "post_formats", "sunset_posts_formats_callback");
+  register_setting("sunset-theme-support", "post_formats");
+  register_setting("sunset-theme-support", "custom_header");
+  register_setting("sunset-theme-support", "custom_background");
 
   add_settings_section("sunset-theme-options", "Theme Options", "sunset_theme_options", "edward_sunset_theme");
 
-  add_settings_field("post-formats", "PostFormats", "sunset_post_formats", "edward_sunset_theme", "sunset-theme-options");
+  add_settings_field("post-formats", "Post Formats", "sunset_post_formats", "edward_sunset_theme", "sunset-theme-options");
+  add_settings_field("custom-header", "Custom Header", "sunset_custom_header", "edward_sunset_theme", "sunset-theme-options");
+  add_settings_field("custom-background", "Custom background", "sunset_custom_background", "edward_sunset_theme", "sunset-theme-options");
+
+  // Contact form options
+  register_setting("sunset-contact-options", "activate_contact");
+
+  add_settings_section("sunset-contact-section", "Contact form", "sunset_contact_section", "edward_sunset_theme_contact");
+
+  add_settings_field("activate-form", "Activate Contact Form", "sunset_activate_contact", "edward_sunset_theme_contact", "sunset-contact-section");
 }
 
 function sunset_theme_options() {
   echo "Activate/Deactivate";
+}
+
+function sunset_contact_section() {
+  echo "Activate/Deactivate";
+}
+
+function sunset_activate_contact() {
+  $options = get_option( 'activate_contact' );
+  $checked = @$options[$format] == 1 ? "checked" : "";
+  $output .= '
+    <label>
+      <input type="checkbox" id="activate_contact" name="activate_contact" value="1" '.$checked.'/>
+    </label> <br>
+  '; 
+
+  echo $output;
 }
 
 function sunset_post_formats() {
@@ -64,8 +92,28 @@ function sunset_post_formats() {
   echo $output;
 }
 
-function sunset_posts_formats_callback($input) {
-  return $input;
+function sunset_custom_header() {
+  $options = get_option( 'custom_header' );
+  $checked = @$options[$format] == 1 ? "checked" : "";
+  $output .= '
+    <label>
+      <input type="checkbox" id="custom_header" name="custom_header" value="1" '.$checked.'/>Activate custom header
+    </label> <br>
+  '; 
+
+  echo $output;
+}
+
+function sunset_custom_background() {
+  $options = get_option( 'custom_background' );
+  $checked = @$options[$format] == 1 ? "checked" : "";
+  $output .= '
+    <label>
+      <input type="checkbox" id="custom_background" name="custom_background" value="1" '.$checked.'/>Activate custome bg
+    </label> <br>
+  '; 
+
+  echo $output;
 }
 
 // Sanitization settings
@@ -78,7 +126,11 @@ function sunset_sanitize_twitter_handler($input) {
 
 function sunset_sidebar_profile() {
   $picture = esc_attr( get_option( 'profile_picture' ) );
-	echo '<input type="button" class="button button-secondary" value="Upload Profile Picture" id="upload-button"><input type="hidden" id="profile-picture" name="profile_picture" value="'.$picture.'" />';
+  if(empty($picture)) {
+    echo '<input type="button" class="button button-secondary" value="Upload Profile Picture"   id="upload-button"><input type="hidden" id="profile-picture" name="profile_picture" value="" />';
+  } else {
+    echo '<input type="button" class="button button-secondary" value="Replace Profile Picture"   id="upload-button"><input type="hidden" id="profile-picture" name="profile_picture" value="'.$picture.'" /> <input type="button" class="button button-secondary" value="Remove" id="remove-picture"/> ';
+  }
 }
 
 function sunset_sidebar_facebook() {
@@ -131,6 +183,11 @@ function sunset_theme_create_page() {
 function sunset_theme_support_page() {
   require_once(get_template_directory() . "/inc/templates/sunset-theme-support.php");
 }
+
+function sunset_contact_form_page() {
+  require_once(get_template_directory() . "/inc/templates/sunset-contact-form.php");
+}
+
 
 function sunset_theme_settings_page() {
   return 0;

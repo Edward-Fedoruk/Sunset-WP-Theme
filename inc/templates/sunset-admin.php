@@ -6,14 +6,17 @@
 	$lastName = esc_attr( get_option( 'last_name' ) );
 	$fullName = $firstName . ' ' . $lastName;
 	$description = esc_attr( get_option( 'user_description' ) );
+	$pc = esc_attr( get_option( 'profile_picture' ) );
 ?>
 
 <div class="sunset-sidebar-preview">
 	<div class="sunset-sidebar">
+		<div class="image-container">
+			<div class="profile-picture" style="background-image: url(<?php print $pc ?>)"></div>
+		</div>
 		<h1 class="sunset-username"><?php print $fullName; ?></h1>
 		<h2 class="sunset-description"><?php print $description; ?></h2>
-		<div class="icons-wrapper">
-			
+		<div class="icons-wrapper" >
 		</div>
 	</div>
 </div>
