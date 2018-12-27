@@ -23,4 +23,13 @@ $(document).ready(function() {
 
   })
 
+  $("#remove-picture").on("click", function(e) {
+    e.preventDefault()
+    var answer = confirm("Are you shure you want to remove picture?")
+    if(answer) {
+      $("#profile-picture").val("")
+      $(".sunset-general-form").submit()
+    }
+  })
+
 })
